@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Capture and Display Image on 'C' Key Press</title>
+  </head>
+  <body>
+    <h1>Hello, Capture and Display Image on 'C' Key Press!</h1>
+    <p>
+      Press the 'C' key to capture the screen and display the captured image.
+    </p>
+    <div id="imageContainer"></div>
+
+    <script>
+      // 'imageContainer'라는 ID를 가진 <div> 요소를 가져와 'imageContainer' 변수에 할당합니다.
+      const imageContainer = document.getElementById("imageContainer");
+
+      // 웹 페이지에서 키 입력을 감지하는 이벤트 리스너를 추가합니다.
+      window.addEventListener("keydown", (event) => {
+        // 키 코드 67은 'C' 키를 의미합니다.
+        if (event.keyCode === 67) {
+          // 'C' 키가 눌리면 captureAndDisplayImage 함수를 호출합니다.
+          captureAndDisplayImage();
+        }
+      });
+
+      // 브라우저 창 전체를 캡처하고 그 이미지를 화면에 표시하는 함수입니다.
+      function captureAndDisplayImage() {
+        // <canvas> 요소를 생성하고 그림을 그리는 데 사용할 2D 컨텍스트를 얻습니다.
+        const captureCanvas = document.createElement("canvas");
+        const ctx = captureCanvas.getContext("2d");
+
+        // 창의 폭과 높이를 변수에 저장합니다.
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        // 캔버스의 크기를 창의 크기로 설정합니다.
+        captureCanvas.width = width;
+        captureCanvas.height = height;
+
+        // 캔버스를 지우고 전체 창을 그립니다.
+        ctx.clearRect(0, 0, width, height);
+        ctx.drawImage(document.documentElement, 0, 0, width, height);
+
+        // 이미지 객체를 생성하고 데이터 URL로 설정합니다.
+        const capturedImage = new Image();
+        capturedImage.src = captureCanvas.toDataURL("image/png");
+
+        // 이미지가 로드될 때 실행되는 함수입니다.
+        capturedImage.onload = () => {
+          // 이미지 컨테이너의 내용을 지우고 이미지를 추가합니다.
+          imageContainer.innerHTML = "";
+          imageContainer.appendChild(capturedImage);
+        };
+      }
+    </script>
+  </body>
+</html>

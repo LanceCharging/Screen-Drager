@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Capture Full Page and Display in a Popup</title>
+  </head>
+  <body>
+    <h1>Hello, Capture and Display in a Popup!</h1>
+    <p>Press the 'C' key to capture and display the full page in a popup.</p>
+
+    <script>
+      // 키 입력 감지
+      window.addEventListener("keydown", (event) => {
+        // 키 코드 67는 'C' 키를 의미합니다.
+        if (event.keyCode === 67) {
+          showNewText();
+          captureAndDisplay();
+        }
+      });
+
+      function showNewText() {
+        const newText = document.createElement("p");
+        newText.textContent = "New text: " + new Date().toLocaleTimeString();
+        textContainer.appendChild(newText);
+      }
+
+      // 브라우저 전체를 캡처하고 이미지를 작은 창에 표시
+      function captureAndDisplay() {
+        const captureCanvas = document.createElement("canvas");
+        const ctx = captureCanvas.getContext("2d");
+        const width = window.innerWidth; // 브라우저 창 너비
+        const height = window.innerHeight; // 브라우저 창 높이
+
+        captureCanvas.width = width;
+        captureCanvas.height = height;
+
+        ctx.clearRect(0, 0, width, height);
+
+        // 브라우저 창 내용을 캡처하여 이미지로 그리기
+        ctx.drawImage(document.documentElement, 0, 0, width, height);
+
+        // 작은 창을 열어서 이미지 표시
+        const popupWindow = window.open("", "_blank", "width=600,height=400");
+        const capturedImage = new Image();
+        capturedImage.src = captureCanvas.toDataURL("image/png");
+
+        // 이미지가 로드되었을 때 작은 창에 표시
+        capturedImage.onload = () => {
+          popupWindow.document.body.appendChild(capturedImage);
+        };
+      }
+    </script>
+  </body>
+</html>

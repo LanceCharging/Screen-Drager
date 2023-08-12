@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "image to pepe",
+  "description": "change everything to pepe",
+  "version": "0.1",
+  "icons": {
+    "16": "images/임시16.png",
+    "32": "images/임시32.png",
+    "48": "images/임시48.png",
+    "128": "images/임시128.png"
+  },
+  "action": {
+    "default_icon": "images/임시32.png",
+    "default_title": "Pepe",
+    "default_popup": "popup/popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["index.js"]
+    }
+  ]
+}

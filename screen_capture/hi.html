@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Show 'hi' on 'C' Key Press</title>
+  </head>
+  <body>
+    <h1>Hello, Show 'hi' on 'C' Key Press!</h1>
+    <p>Press the 'C' key to display 'hi' on the screen.</p>
+    <div id="textContainer"></div>
+
+    <script>
+      const textContainer = document.getElementById("textContainer");
+
+      // 키 입력 감지
+      window.addEventListener("keydown", (event) => {
+        // 키 코드 67는 'C' 키를 의미합니다.
+        if (event.keyCode === 67) {
+          showHiText();
+        }
+      });
+
+      // 'hi' 텍스트 표시
+      function showHiText() {
+        const newText = document.createElement("p");
+        newText.textContent = "hi";
+        textContainer.appendChild(newText);
+      }
+
+      function captureAndDisplayImage() {
+        const captureCanvas = document.createElement("canvas");
+        const ctx = captureCanvas.getContext("2d");
+
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        captureCanvas.width = width;
+        captureCanvas.height = height;
+
+        ctx.clearRect(0, 0, width, height);
+        ctx.drawImage(document.documentElement, 0, 0, width, height);
+
+        const capturedImage = new Image();
+        capturedImage.src = captureCanvas.toDataURL("image/png");
+
+        capturedImage.onload = () => {
+          imageContainer.innerHTML = "";
+          imageContainer.appendChild(capturedImage);
+        };
+      }
+    </script>
+  </body>
+</html>
