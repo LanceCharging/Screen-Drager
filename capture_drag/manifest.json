@@ -1,9 +1,15 @@
 {
   "manifest_version": 3,
-  "name": "screen_capture4_drag",
+  "name": "capure_drag",
   "version": "1.0",
   "description": "Capture and display the screen",
-  "permissions": ["activeTab"],
+  "permissions": ["tabs", "activeTab", "scripting"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["scripts/drag.js"]
+    }
+  ],
   "commands": {
     "capture_screen": {
       "suggested_key": {
