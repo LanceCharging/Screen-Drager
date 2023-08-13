@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "communication",
+  "version": "1.0",
+  "description": "communicaction test",
+  "permissions": ["tabs", "activeTab", "scripting"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "1": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+1"
+      },
+      "description": "Perform action 1"
+    },
+    "2": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+2"
+      },
+      "description": "Perform action 2"
+    },
+    "3": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+3"
+      },
+      "description": "Perform action 3"
+    }
+  }
+}
