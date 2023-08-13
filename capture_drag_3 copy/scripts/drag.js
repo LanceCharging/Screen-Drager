@@ -13,8 +13,10 @@ const checkAndSendMessage = () => {
 };
 
 document.addEventListener("mousedown", (e) => {
-  X1 = e.clientX;
-  Y1 = e.clientY;
+  chrome.runtime.sendMessage({
+    order: "click",
+    coordinate: [e.clientX, e.clientY],
+  });
 });
 
 document.addEventListener("mouseup", (e) => {

@@ -15,6 +15,8 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     console.log(message.drag);
   } else if (message.order === "drag_start") {
     console.log("drag_start");
+  } else if (message.order === "click") {
+    console.log(message.coordinate);
   }
 });
 
