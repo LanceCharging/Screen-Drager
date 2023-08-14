@@ -1,27 +1,19 @@
 chrome.runtime.sendMessage({ order: "drag_start" });
 
-let X1 = "?",
-  Y1 = "?",
-  X2 = "?",
-  Y2 = "?";
-
-const checkAndSendMessage = () => {
-  if (X1 !== "?" && Y1 !== "?" && X2 !== "?" && Y2 !== "?") {
-    clearInterval(interval);
-    chrome.runtime.sendMessage({ order: "drag", drag: [X1, Y1, X2, Y2] });
-  }
-};
+let startX, startY;
 
 document.addEventListener("mousedown", (e) => {
-  chrome.runtime.sendMessage({
-    order: "click",
-    coordinate: [e.clientX, e.clientY],
-  });
+  startX = e.clientX;
+  startY = e.clientY;
 });
 
 document.addEventListener("mouseup", (e) => {
-  X2 = e.clientX;
-  Y2 = e.clientY;
-});
+  const endX = e.clientX;
+  const endY = e.clientY;
 
-const interval = setInterval(checkAndSendMessage, 100);
+  // 드래그 시작 위치와 끝 위치 정보 사용하여 작업 수행
+  chrome.runtime.sendMessage({
+    order: "message",
+    message: [startX, startY, endX, endY],
+  });
+});
