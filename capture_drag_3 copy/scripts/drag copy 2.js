@@ -43,42 +43,32 @@ document.addEventListener("mousedown", (e) => {
       order: "message",
       message: [startX, startY, endX, endY],
     });
-    captureAndSaveImage(startX, startY, endX, endY);
+    captureAndSaveImage();
   });
 });
 
-function captureAndSaveImage(startX, startY, endX, endY) {
+function captureAndSaveImage() {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
   origin_img = document.getElementById("capture_origin");
 
-  const origin_width = parseInt(
-    document.getElementById("origin-width").textContent
-  );
-  const origin_height = parseInt(
-    document.getElementById("origin-height").textContent
-  );
+  const width = parseInt(dragBox.style.width, 10) / window.innerWidth;
+  const height = parseInt(dragBox.style.height, 10) / window.innerHeight;
 
-  const width_marginity = Math.abs(endX - startX) / window.innerWidth;
-  const height_marginity = Math.abs(endY - startY) / window.innerHeight;
-
-  canvas.width = width_marginity * origin_width;
-  canvas.height = height_marginity * origin_height;
-
-  const left_marginity = Math.min(startX, endX) / window.innerWidth;
-  const top_marginity = Math.min(startY, endY) / window.innerHeight;
+  canvas.width = width * origin_img.width;
+  canvas.height = height * origin_img.height;
 
   ctx.drawImage(
     origin_img,
-    left_marginity * origin_width,
-    top_marginity * origin_height,
-    canvas.width,
-    canvas.height,
+    (parseInt(dragBox.style.left, 10) / window.innerWidth) * origin_img.width,
+    (parseInt(dragBox.style.top, 10) / window.innerHeight) * origin_img.height,
+    width * origin_img.width,
+    height * origin_img.height,
     0,
     0,
-    canvas.width,
-    canvas.height
+    width * origin_img.width,
+    height * origin_img.height
   );
 
   const croppedImageUrl = canvas.toDataURL("image/png");
@@ -87,11 +77,6 @@ function captureAndSaveImage(startX, startY, endX, endY) {
   downloadLink.download = "cropped_image.png";
   downloadLink.href = canvas.toDataURL("image/png");
   downloadLink.click();
-
-  // const downloadLink2 = document.createElement("a");
-  // downloadLink2.download = "original_image.png";
-  // downloadLink2.href = origin_img.src;
-  // downloadLink2.click();
 
   // chrome.runtime.sendMessage({ order: "message", message: croppedImageUrl });
 }
