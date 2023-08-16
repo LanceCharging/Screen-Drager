@@ -6,35 +6,45 @@ chrome.commands.onCommand.addListener(function (command) {
   }
 });
 
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  if (message.order === "give me d_url") {
+    sendResponse(d_url);
+    console.log(d_url);
+  } else if (message.order === "drag") {
+    console.log("drag");
+    console.log(message.drag);
+  } else if (message.order === "drag_start") {
+    console.log("drag_start");
+  } else if (message.order === "message") {
+    console.log(message.message);
+  }
+});
+
 function captureAndDisplayScreen() {
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tab) {
-    const currentTabIndex = tab[0].index;
+  chrome.tabs.query(
+    { active: true, currentWindow: true },
+    function (current_tab) {
+      const currentTabIndex = current_tab[0].index;
 
-    chrome.tabs.captureVisibleTab(null, { format: "png" }, function (dataUrl) {
-      chrome.tabs.create({ url: dataUrl, index: currentTabIndex + 1 });
-      d_url = dataUrl;
-    });
-
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tab2) {
-      const ImageTabId = tab2[0].id;
-      chrome.scripting.executeScript({
-        target: { tabId: ImageTabId, allFrames: true },
-        files: ["scripts/drag.js"],
+      const capture = new Promise((resolve) => {
+        chrome.tabs.captureVisibleTab(
+          null,
+          { format: "png" },
+          function (dataUrl) {
+            resolve(dataUrl);
+          }
+        );
       });
-    });
 
-    chrome.runtime.sendMessage({ addressee: "drag", order: "drag" });
-
-    chrome.runtime.onMessage.addListener(function (
-      message,
-      sender,
-      sendResponse
-    ) {
-      if (message.addressee === "backgound") {
-        if (message.order === "drag_coordinates") {
-          console.log(message.data);
-        }
-      }
-    });
-  });
+      capture.then((dataUrl) => {
+        d_url = dataUrl;
+        return new Promise((resolve) => {
+          chrome.tabs.create({
+            url: chrome.runtime.getURL("canvas.html"),
+            index: currentTabIndex + 1,
+          });
+        });
+      });
+    }
+  );
 }
